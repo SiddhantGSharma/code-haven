@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title> Olympics </title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<style>
+	    body {
+            	background-image: url("https://t4.ftcdn.net/jpg/00/20/60/77/360_F_20607797_CfLnzbbZB0NBp9QMfZR7GzDNooDnmtzo.jpg");
+		background-repeat: repeat-y;
+  		background-size: cover;
+		height: 1024px
+            }
+
+            .topnav {
+                justify-content: center;
+                margin: auto;
+                width: 30%;
+            }
+        </style>
+    </head>
+
+    <body>
+        <header style="padding: 30px; text-align: center; background-color: #14967d; color: #e0e0e0;">
+            <h1 style="font-family: 'Lucida Calligraphy', cursive;">Olympics Data</h1>
+        </header> <br>
+
+            <div class="topnav">
+                <form action="/search_bar" method="post" style="display: flex;">
+                   <input type="text" name="search_input" placeholder="Search...">
+                   <input type="submit" value="Submit">
+                </form> <br>
+
+		<form action="/adv_query_1" method="post">
+		   <input type="submit" value="Athletes over 30 with Salary > Average">
+		</form>
+
+		<form action="/adv_query_2" method="post">
+		   <input type="submit" value="Coaches with Medals > 5">
+		</form>
+
+            </div>
+    </body>
+</html>

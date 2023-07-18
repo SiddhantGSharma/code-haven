@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title> Olympics </title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<style>
+            body {
+		background-image: url("https://t4.ftcdn.net/jpg/00/20/60/77/360_F_20607797_CfLnzbbZB0NBp9QMfZR7GzDNooDnmtzo.jpg");
+                background-repeat: repeat-y;
+                background-size: cover;
+                height: 1024px
+            }
+
+	    h4 {
+		font-family: 'Lucida Calligraphy', cursive;
+		color: #171717;
+	    }
+
+	    table {
+		background-color: #ffffff;
+	    }
+
+            .topnav {
+                justify-content: center;
+                margin: auto;
+                width: 30%;
+            }
+        </style>
+    </head>
+
+    <body>
+        <header style="padding: 30px; text-align: center; background-color: #14967d; color: #e0e0e0;">
+            <h1 style="font-family: 'Lucida Calligraphy', cursive;">Olympics Data</h1>
+        </header> <br>
+	    <div class="everything">
+            <div class="topnav">
+                <form action="/search_bar" method="post">
+                   <input type="text" name="search_input" placeholder="Search...">
+                   <input type="submit" value="Submit">
+                </form><br>
+
+		<form action="/adv_query_1" method="post">
+                   <input type="submit" value="Athletes over 30 with Salary > Average">
+                </form>
+
+                <form action="/adv_query_2" method="post">
+                   <input type="submit" value="Coaches with Medals > 5">
+                </form>
+
+		<form action="/update_medals" method="post">
+                   <input type="submit" value="Update Medals">
+                </form>
+			
+	    </div>
+		 <br>   
+                   <!-- Table for Athletes -->
+                   <h4> <span style="background-color: #e4ffb5"> Athletes </span> </h4>
+
+                   <button onclick="show1()">Insert</button>
+
+                   <form id="input_form_1" action="/insert_ath" method="post" style="display: none;">
+                        <input type="text" name="input_ath_name" placeholder="Insert Athlete Name...">
+                        <input type="text" name="input_noc" placeholder="Insert Country...">
+                        <input type="text" name="input_dis" placeholder="Insert Discipline...">
+                        <input type="text" name="input_age" placeholder="Insert Age...">
+                        <input type="text" name="input_sal" placeholder="Insert Salary...">
+                        <input type="submit" value="Submit">
+                   </form>
+
+                   <br>
+                   
+                   <script>
+                        function show1() {
+                                const form_in = document.getElementById("input_form_1");
+
+                                if (form_in.style.display === "none") {
+                                    form_in.style.display = "block";
+                                } else {
+                                    form_in.style.display = "none";
+                                }
+                        }
+                   </script>
+
+                   <table border="1">
+                    <tr>
+                        <th>Sr. No.</th>
+                        <th>Athlete Name</th>
+                        <th>NOC</th>
+                        <th>Discipline</th>
+                        <th>Age</th>
+                        <th>Salary</th>
+                        <th>Actions</th>
+                        </tr>
+
+                    <%
+                        if(data_ath.length!=0){
+                        var i=1;
+                        data_ath.forEach(function(res){
+                    %>
+                    <tr>
+                        <td><%=i; %></td>
+                        <td id="ath_name_id"><%=res.Ath_Name %></td>
+                        <td><%=res.NOC %></td>
+                        <td><%=res.Discipline %></td>
+                        <td><%=res.Age %></td>
+                        <td><%=res.Salary %></td>
+                        <td> <button onclick="edit1<%= i %>()">Edit</button>
+
+                            <form id="edit1_<%= i %>" action="/edit_ath" method="post" style="display: none;">
+                                 <input type="text" name="input_ath_name" placeholder="Insert Athlete Name...">
+                                 <input type="text" name="input_noc" placeholder="Insert Country...">
+                                 <input type="text" name="input_dis" placeholder="Insert Discipline...">
+                                 <input type="text" name="input_age" placeholder="Insert Age...">
+                                 <input type="text" name="input_sal" placeholder="Insert Salary...">
+				 <input type="hidden" name="edit_name" value="<%= res.Ath_Name %>">
+                                 <input type="submit" value="Submit">
+                            </form>
+                            <br>
+                            <script>
+                                function edit1<%= i %>() {
+                                        const form_in = document.getElementById("edit1_<%= i %>");
+        
+                                        if (form_in.style.display === "none") {
+                                            form_in.style.display = "block";
+                                        } else {
+                                            form_in.style.display = "none";
+                                        }
+                                }
+                           </script>
+			<form action="/delete_ath" method="post"><input type="hidden" name="ath_name" value="<%= res.Ath_Name %>"><input type="submit" value="Delete"></form></td> 
+                    </tr>
+                    <%  i++; }) %>
+                    <% } else{ %>
+                    <tr>
+                        <td colspan="7">Not Applicable</td>
+                    </tr>
+                    <% } %>
+                   </table> <br>
+
+		  <!-- Table for Coaches -->
+                   <h4> <span style="background-color: #e4ffb5"> Coaches </span> </h4>
+
+                   <button onclick="show2()">Insert</button>
+
+                   <form id="input_form_2" action="/insert_coa" method="post" style="display: none;">
+                        <input type="text" name="input_coa_name" placeholder="Insert Coach Name...">
+                        <input type="text" name="input_noc" placeholder="Insert Country...">
+                        <input type="text" name="input_dis" placeholder="Insert Discipline...">
+                        <input type="text" name="input_eve" placeholder="Insert Event...">
+                        <input type="submit" value="Submit">
+                   </form>
+
+                   <br>
+                   
+                   <script>
+                        function show2() {
+                                const form_in = document.getElementById("input_form_2");
+
+                                if (form_in.style.display === "none") {
+                                    form_in.style.display = "block";
+                                } else {
+                                    form_in.style.display = "none";
+                                }
+                        }
+                   </script>
+
+                   <table border="1">
+                    <tr>
+                        <th>Sr. No.</th>
+                        <th>Coach Name</th>
+                        <th>NOC</th>
+                        <th>Discipline</th>
+                        <th>Event</th>
+                        <th>Actions</th>
+                        </tr>
+
+                    <%
+                        if(data_coa.length!=0){
+                        var i=1;
+                        data_coa.forEach(function(res){
+                    %>
+                    <tr>
+                        <td><%=i; %></td>
+                        <td><%=res.Coa_Name %></td>
+                        <td><%=res.NOC %></td>
+                        <td><%=res.Discipline %></td>
+                        <td><%=res.Event %></td>
+                        <td> <button onclick="edit2<%= i %>()">Edit</button>
+
+                            <form id="edit2_<%= i %>" action="/edit_coa" method="post" style="display: none;">
+                                <input type="text" name="input_coa_name" placeholder="Insert Coach Name...">
+                                <input type="text" name="input_noc" placeholder="Insert Country...">
+                                <input type="text" name="input_dis" placeholder="Insert Discipline...">
+                                <input type="text" name="input_eve" placeholder="Insert Event...">
+                                 <input type="hidden" name="edit_name" value="<%= res.Coa_Name %>">
+                                 <input type="submit" value="Submit">
+                            </form>
+                            <br>
+                            <script>
+                                function edit2<%= i %>() {
+                                        const form_in = document.getElementById("edit2_<%= i %>");
+
+                                        if (form_in.style.display === "none") {
+                                            form_in.style.display = "block";
+                                        } else {
+                                            form_in.style.display = "none";
+                                        }
+                                }
+                           </script>
+			<form action="/delete_coa" method="post"><input type="hidden" name="coa_name" value="<%= res.Coa_Name %>"><input type="submit" value="Delete"></form></td>
+                    </tr>
+                    <%  i++; }) %>
+                    <% } else{ %>
+                    <tr>
+                        <td colspan="7">Not Applicable</td>
+                    </tr>
+                    <% } %>
+                   </table><br>
+
+
+                   <!-- Table for Sport -->
+                   <h4> <span style="background-color: #e4ffb5"> Sports </span> </h4>
+
+                   <button onclick="show3()">Insert</button>
+
+                   <form id="input_form_3" action="/insert_spo" method="post" style="display: none;">
+                        <input type="text" name="input_dis" placeholder="Insert Discipline...">
+                        <input type="text" name="input_avg_sal" placeholder="Insert Average Salary...">
+                        <input type="text" name="input_avg_age" placeholder="Insert Average Age...">
+                        <input type="submit" value="Submit">
+                   </form>
+
+                   <br>
+                   
+                   <script>
+                        function show3() {
+                                const form_in = document.getElementById("input_form_3");
+
+                                if (form_in.style.display === "none") {
+                                    form_in.style.display = "block";
+                                } else {
+                                    form_in.style.display = "none";
+                                }
+                        }
+                   </script>
+
+                   <table border="1">
+                    <tr>
+                        <th>Sr. No.</th>
+                        <th>Discipline</th>
+                        <th>Average Salary</th>
+                        <th>Average Age</th>
+                        <th>Actions</th>
+                        </tr>
+
+                    <%
+                        if(data_spo.length!=0){
+                        var i=1;
+                        data_spo.forEach(function(res){
+                    %>
+                    <tr>
+                        <td><%=i; %></td>
+                        <td><%=res.Discipline %></td>
+                        <td><%=res.Avg_Salary %></td>
+                        <td><%=res.Avg_Age %></td>
+                        <td> <button onclick="edit3<%= i %>()">Edit</button>
+
+                            <form id="edit3_<%= i %>" action="/edit_spo" method="post" style="display: none;">
+                                <input type="text" name="input_dis" placeholder="Insert Discipline...">
+                                <input type="text" name="input_avg_sal" placeholder="Insert Average Salary...">
+                                <input type="text" name="input_avg_age" placeholder="Insert Average Age...">
+                                 <input type="hidden" name="edit_name" value="<%= res.Discipline %>">
+                                 <input type="submit" value="Submit">
+                            </form>
+                            <br>
+                            <script>
+                                function edit3<%= i %>() {
+                                        const form_in = document.getElementById("edit3_<%= i %>");
+
+                                        if (form_in.style.display === "none") {
+                                            form_in.style.display = "block";
+                                        } else {
+                                            form_in.style.display = "none";
+                                        }
+                                }
+                           </script>
+			<form action="/delete_spo" method="post"><input type="hidden" name="dis" value="<%= res.Discipline %>"><input type="submit" value="Delete"></form></td>
+                    </tr>
+                    <%  i++; }) %>
+                    <% } else{ %>
+                    <tr>
+                        <td colspan="7">Not Applicable</td>
+                    </tr>
+                    <% } %>
+                   </table><br>
+
+		
+		   <!-- Table for Teams -->
+                   <h4> <span style="background-color: #e4ffb5"> Teams </span> </h4>
+
+                   <button onclick="show4()">Insert</button>
+
+                   <form id="input_form_4" action="/insert_tea" method="post" style="display: none;">
+                        <input type="text" name="input_name" placeholder="Insert Team Name...">
+                        <input type="text" name="input_dis" placeholder="Insert Discipline...">
+                        <input type="text" name="input_noc" placeholder="Insert Country...">
+                        <input type="text" name="input_eve" placeholder="Insert Event...">
+                        <input type="submit" value="Submit">
+                   </form>
+
+                   <br>
+                   
+                   <script>
+                        function show4() {
+                                const form_in = document.getElementById("input_form_4");
+
+                                if (form_in.style.display === "none") {
+                                    form_in.style.display = "block";
+                                } else {
+                                    form_in.style.display = "none";
+                                }
+                        }
+                   </script>
+
+                   <table border="1">
+                    <tr>
+                        <th>Sr. No.</th>
+                        <th>Name</th>
+                        <th>Discipline</th>
+                        <th>NOC</th>
+                        <th>Event</th>
+                        <th>Actions</th>
+                        </tr>
+
+                    <%
+                        if(data_tea.length!=0){
+                        var i=1;
+                        data_tea.forEach(function(res){
+                    %>
+                    <tr>
+                        <td><%=i; %></td>
+                        <td><%=res.Name %></td>
+                        <td><%=res.Discipline %></td>
+                        <td><%=res.NOC %></td>
+                        <td><%=res.Event %></td>
+                        <td> <button onclick="edit4<%= i %>()">Edit</button>
+
+                            <form id="edit4_<%= i %>" action="/edit_tea" method="post" style="display: none;">
+                                <input type="text" name="input_name" placeholder="Insert Team Name...">
+                                <input type="text" name="input_dis" placeholder="Insert Discipline...">
+                                <input type="text" name="input_noc" placeholder="Insert Country...">
+                                <input type="text" name="input_eve" placeholder="Insert Event...">
+                                 <input type="hidden" name="edit_name" value="<%= res.Name %>">
+                                 <input type="submit" value="Submit">
+                            </form>
+                            <br>
+                            <script>
+                                function edit4<%= i %>() {
+                                        const form_in = document.getElementById("edit4_<%= i %>");
+
+                                        if (form_in.style.display === "none") {
+                                            form_in.style.display = "block";
+                                        } else {
+                                            form_in.style.display = "none";
+                                        }
+                                }
+                           </script>
+			<form action="/delete_tea" method="post"><input type="hidden" name="ath_name" value="<%= res.Ath_Name %>"><input type="submit" value="Delete"></form></td>
+                    </tr>
+                    <%  i++; }) %>
+                    <% } else{ %>
+                    <tr>
+                        <td colspan="7">Not Applicable</td>
+                    </tr>
+                    <% } %>
+                   </table><br>
+
+
+
+                   <!-- Table for Medals -->
+                   <h4> <span style="background-color: #e4ffb5"> Medals </span> </h4>
+
+                   <button onclick="show5()">Insert</button>
+
+                   <form id="input_form_5" action="/insert_med" method="post" style="display: none;">
+                        <input type="text" name="input_ath_name" placeholder="Insert Athlete Name...">
+                        <input type="text" name="input_noc" placeholder="Insert Country...">
+                        <input type="text" name="input_num_t" placeholder="Insert Total Medals...">
+                        <input type="text" name="input_num_g" placeholder="Insert Gold Medals...">
+                        <input type="text" name="input_num_s" placeholder="Insert Silver Medals...">
+                        <input type="text" name="input_num_b" placeholder="Insert Bronze Medals...">
+                        <input type="submit" value="Submit">
+                   </form>
+
+                   <br>
+                   
+                   <script>
+                        function show5() {
+                                const form_in = document.getElementById("input_form_5");
+
+                                if (form_in.style.display === "none") {
+                                    form_in.style.display = "block";
+                                } else {
+                                    form_in.style.display = "none";
+                                }
+                        }
+                   </script>
+
+                   <table border="1">
+                    <tr>
+                        <th>Sr. No.</th>
+                        <th>Athlete Name</th>
+                        <th>NOC</th>
+                        <th>Num_total</th>
+                        <th>Num_Gold</th>
+                        <th>Num_Silver</th>
+                        <th>Num_Brozen</th>
+                        <th>Actions</th>
+                        </tr>
+
+                    <%
+                        if(data_med.length!=0){
+                        var i=1;
+                        data_med.forEach(function(res){
+                    %>
+                    <tr>
+                        <td><%=i; %></td>
+                        <td><%=res.Ath_Name %></td>
+                        <td><%=res.NOC %></td>
+                        <td><%=res.Num_total %></td>
+                        <td><%=res.Num_Gold %></td>
+                        <td><%=res.Num_Silver %></td>
+                        <td><%=res.Num_Brozen %></td>
+                        <td> <button onclick="edit5<%= i %>()">Edit</button>
+
+                            <form id="edit5_<%= i %>" action="/edit_med" method="post" style="display: none;">
+                                <input type="text" name="input_ath_name" placeholder="Insert Athlete Name...">
+                                <input type="text" name="input_noc" placeholder="Insert Country...">
+                                <input type="text" name="input_num_t" placeholder="Insert Total Medals...">
+                                <input type="text" name="input_num_g" placeholder="Insert Gold Medals...">
+                                <input type="text" name="input_num_s" placeholder="Insert Silver Medals...">
+                                <input type="text" name="input_num_b" placeholder="Insert Bronze Medals...">
+                                 <input type="hidden" name="edit_name" value="<%= res.Ath_Name %>">
+                                 <input type="submit" value="Submit">
+                            </form>
+                            <br>
+                            <script>
+                                function edit5<%= i %>() {
+                                        const form_in = document.getElementById("edit5_<%= i %>");
+
+                                        if (form_in.style.display === "none") {
+                                            form_in.style.display = "block";
+                                        } else {
+                                            form_in.style.display = "none";
+                                        }
+                                }
+                           </script>
+			<form action="/delete_med" method="post"><input type="hidden" name="ath_name" value="<%= res.Ath_Name %>"><input type="submit" value="Delete"></form></td>
+                    </tr>
+                    <%  i++; }) %>
+                    <% } else{ %>
+                    <tr>
+                        <td colspan="7">Not Applicable</td>
+                    </tr>
+                    <% } %>
+                   </table><br>
+
+
+		   <!-- Table for Athlete Coaches -->
+                   <h4> <span style="background-color: #e4ffb5"> Coaches of Athletes </span> </h4>
+
+                   <button onclick="show6()">Insert</button>
+
+                   <form id="input_form_6" action="/insert_ath_coa" method="post" style="display: none;">
+                        <input type="text" name="input_ath_name" placeholder="Insert Athlete Name...">
+                        <input type="text" name="input_coa_name" placeholder="Insert Coach Name...">
+                        <input type="submit" value="Submit">
+                   </form>
+
+                   <br>
+                   
+                   <script>
+                        function show6() {
+                                const form_in = document.getElementById("input_form_6");
+
+                                if (form_in.style.display === "none") {
+                                    form_in.style.display = "block";
+                                } else {
+                                    form_in.style.display = "none";
+                                }
+                        }
+                   </script>
+
+                   <table border="1">
+                    <tr>
+                        <th>Sr. No.</th>
+                        <th>Athlete Name</th>
+                        <th>Coach Name</th>
+                        <th>Actions</th>
+                        </tr>
+
+                    <%
+                        if(data_ath_coa.length!=0){
+                        var i=1;
+                        data_ath_coa.forEach(function(res){
+                    %>
+                    <tr>
+                        <td><%=i; %></td>
+                        <td><%=res.Ath_Name %></td>
+                        <td><%=res.Coa_Name %></td>
+                        <td> <button onclick="edit6<%= i %>()">Edit</button>
+
+                            <form id="edit6_<%= i %>" action="/edit_ath_coa" method="post" style="display: none;">
+                                <input type="text" name="input_ath_name" placeholder="Insert Athlete Name...">
+                                <input type="text" name="input_coa_name" placeholder="Insert Coach Name...">
+                                 <input type="hidden" name="edit_name" value="<%= res.Ath_Name %>">
+                                 <input type="submit" value="Submit">
+                            </form>
+                            <br>
+                            <script>
+                                function edit6<%= i %>() {
+                                        const form_in = document.getElementById("edit6_<%= i %>");
+
+                                        if (form_in.style.display === "none") {
+                                            form_in.style.display = "block";
+                                        } else {
+                                            form_in.style.display = "none";
+                                        }
+                                }
+                           </script>
+			<form action="/delete_ath_coa" method="post"><input type="hidden" name="ath_name" value="<%= res.Ath_Name %>"><input type="submit" value="Delete"></form></td>
+                    </tr>
+                    <%  i++; }) %>
+                    <% } else{ %>
+                    <tr>
+                        <td colspan="7">Not Applicable</td>
+                    </tr>
+                    <% } %>
+                   </table><br>
+
+
+
+                   <!-- Table for Team Coaches -->
+                   <h4> <span style="background-color: #e4ffb5"> Team Coaches </span> </h4>
+
+                   <button onclick="show7()">Insert</button>
+
+                   <form id="input_form_7" action="/insert_tea_coa" method="post" style="display: none;">
+                        <input type="text" name="input_coa_name" placeholder="Insert Coach Name...">
+                        <input type="text" name="input_noc" placeholder="Insert Country...">
+                        <input type="text" name="input_dis" placeholder="Insert Discipline...">
+                        <input type="text" name="input_eve" placeholder="Insert Event...">
+                        <input type="submit" value="Submit">
+                   </form>
+
+                   <br>
+                   
+                   <script>
+                        function show7() {
+                                const form_in = document.getElementById("input_form_7");
+
+                                if (form_in.style.display === "none") {
+                                    form_in.style.display = "block";
+                                } else {
+                                    form_in.style.display = "none";
+                                }
+                        }
+                   </script>
+
+                   <table border="1">
+                    <tr>
+                        <th>Sr. No.</th>
+                        <th>Coach Name</th>
+                        <th>NOC</th>
+                        <th>Discipline</th>
+                        <th>Event</th>
+                        <th>Actions</th>
+                        </tr>
+
+                    <%
+                        if(data_tea_coa.length!=0){
+                        var i=1;
+                        data_tea_coa.forEach(function(res){
+                    %>
+                    <tr>
+                        <td><%=i; %></td>
+                        <td><%=res.Coa_Name %></td>
+                        <td><%=res.NOC %></td>
+                        <td><%=res.Discipline %></td>
+                        <td><%=res.Event %></td>
+                        <td> <button onclick="edit7<%= i %>()">Edit</button>
+
+                            <form id="edit7_<%= i %>" action="/edit_tea_coa" method="post" style="display: none;">
+                                <input type="text" name="input_coa_name" placeholder="Insert Coach Name...">
+                                <input type="text" name="input_noc" placeholder="Insert Country...">
+                                <input type="text" name="input_dis" placeholder="Insert Discipline...">
+                                <input type="text" name="input_eve" placeholder="Insert Event...">
+                                 <input type="hidden" name="edit_name" value="<%= res.Coa_Name %>">
+                                 <input type="submit" value="Submit">
+                            </form>
+                            <br>
+                            <script>
+                                function edit7<%= i %>() {
+                                        const form_in = document.getElementById("edit7_<%= i %>");
+
+                                        if (form_in.style.display === "none") {
+                                            form_in.style.display = "block";
+                                        } else {
+                                            form_in.style.display = "none";
+                                        }
+                                }
+                           </script>
+			<form action="/delete_tea_coa" method="post"><input type="hidden" name="coa_name" value="<%= res.Coa_Name %>"><input type="submit" value="Delete"></form></td>
+                    </tr>
+                    <%  i++; }) %>
+                    <% } else{ %>
+                    <tr>
+                        <td colspan="7">Not Applicable</td>
+                    </tr>
+                    <% } %>
+                   </table>
+
+              
+   </div>
+    </body>
+</html>
